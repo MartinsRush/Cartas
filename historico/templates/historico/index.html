@@ -1,0 +1,42 @@
+{% extends "historico/layout.html" %}
+{% load static %}
+
+{% block body %}
+  {% if alerta %}
+    <div class="alert alert-warning" role="alert">{{ alerta }}</div>
+  {% endif %}
+
+  <h2 class="container">Histórico de Cartas Eletronuclear-Framatome</h2>
+
+  <div class="container">
+    
+    <form action="{% url 'index' %}" method="post" autocomplete="off">
+        {% csrf_token %}
+        <div class="mb-3">
+            <!-- <label for="SearchCarta" class="form-label">Número da Carta:</label> -->
+            <input type="text" name="carta" class="form-control" list="datalistOptions" id="SearchCarta" placeholder="Número da Carta, ex.: A3-E3-08704">
+            <datalist id="datalistOptions">
+              {% if cartas %}
+              {% for carta in cartas %}
+                <option value="{{ carta }}">
+              {% endfor %}
+              {% endif %}
+            </datalist>
+        </div>
+        <!-- Botão é carregado disabled e habilitado quando input == Carta Válida -->
+        <button type="submit" id="SearchButton" class="btn btn-primary" disabled>Submit</button>
+    </form>
+
+  </div>
+
+  {% if anteriores %}
+  <div class="container">
+    {{ anteriores | safe }}
+  </div>
+  {% endif %}
+  
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'historico/cartas.js' %}"></script>
+{% endblock %}
